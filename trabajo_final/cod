@@ -1,0 +1,5 @@
+with open('../data/Listado-Instituciones-Educativas.csv', encoding='UTF8') as File:
+    reader = csv.reader(File, delimiter='|', quotechar=',',
+                        quoting=csv.QUOTE_MINIMAL)
+    for row in reader:
+        print(row[0])
