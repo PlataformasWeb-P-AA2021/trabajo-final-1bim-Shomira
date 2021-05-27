@@ -36,30 +36,29 @@ class Provincia(Base):
 class Canton(Base):
     __tablename__ = 'canton'
     id = Column(Integer, primary_key=True)
-    nombre = Column(String(100) )
+    nombre = Column(String(100), unique=True)
     cod_division_politica = Column(String(50),nullable=False)#Código División Política Administrativa  Cantón
-    codigo_distrito = Column(String(50),nullable=False) #Código de Distrito
     provincia_id = Column(Integer, ForeignKey('provincia.id'))
     provincia = relationship("Provincia", back_populates="canton")
+    parroquia = relationship("Parroquia", back_populates="canton")############################################
     def __repr__(self):
         return "Canton: nombre=%s\n provincia=%s\n"% (
                           self.nombre, 
                           self.provincia)
-'''
+
 class Parroquia(Base):
     __tablename__ = 'parroquia'
     id = Column(Integer, primary_key=True)
     nombre = Column(String(100), nullable=False)
-    
+    codigo_distrito = Column(String(50),nullable=False) #Código de Distrito
     cod_division_politica = Column(String(50),nullable=False)#Código División Política Administrativa  Parroquia
     canton_id = Column(Integer, ForeignKey('canton.id'))
-    cantones = relationship("Canton", back_populates="parroquias")
-    establecimeintos = relationship("Establecimeinto", back_populates="parroquias")
-    
+    canton = relationship("Canton", back_populates="parroquia")
     def __repr__(self):
-        return "Parroquia: %s" % (
-                self.nombre)
-
+        return "Parroquia: nombre=%s\n canton=%s\n"% (
+                          self.nombre, 
+                          self.canton)
+'''
 class Establecimiento(Base):
     __tablename__ = 'establecimiento'
     id = Column(Integer, primary_key=True)

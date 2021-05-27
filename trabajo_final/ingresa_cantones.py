@@ -21,19 +21,21 @@ session = Session()
 provincias = session.query(Provincia).all()
 print(provincias[1])
 with open('../data/Listado-Instituciones-Educativas.csv', encoding='UTF8') as File:
-    reader = csv.reader(File, delimiter='|', quotechar=',',
+    reader = csv.reader(File,delimiter='|', quotechar=',',
                         quoting=csv.QUOTE_MINIMAL)
     aux=[]
+    id_p=0
+    nomAux=""
     for row in reader:
-        #print(row)
         aux=row
-        id_p=0
+        
         for p in provincias:
-            if aux[5] == p.nombre:
+            if aux[4] == p.nombre:
                 id_p = p.id
-            p=p
-        c = Canton(nombre=aux[5], cod_division_politica=aux[4],codigo_distrito=aux[8], provincia= p, provincia_id=id_p)
-        session.add(c)
+            if nomAux != aux[5]:
+                nomAux=aux[5]
+                c = Canton(nombre=aux[5], cod_division_politica=aux[4], provincia= p, provincia_id=id_p)
+                session.add(c)
 
 # confirmacion de transacciones
 session.commit()
