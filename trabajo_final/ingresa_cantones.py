@@ -19,23 +19,21 @@ session = Session()
 
 #Lectura del archivos
 provincias = session.query(Provincia).all()
-print(provincias[1])
+
 with open('../data/Listado-Instituciones-Educativas.csv', encoding='UTF8') as File:
     reader = csv.reader(File,delimiter='|', quotechar=',',
                         quoting=csv.QUOTE_MINIMAL)
-    aux=[]
+    next(reader)
+    nomAux=""     
     id_p=0
-    nomAux=""
+    aux=[]
     for row in reader:
-        aux=row
-        
-        for p in provincias:
-            if aux[4] == p.nombre:
-                id_p = p.id
-            if nomAux != aux[5]:
-                nomAux=aux[5]
-                c = Canton(nombre=aux[5], cod_division_politica=aux[4], provincia= p, provincia_id=id_p)
-                session.add(c)
-
-# confirmacion de transacciones
+        if row[5] not in aux:
+            aux.append(row[5])
+            for p in provincias:
+                if row[3] == p.nombre:
+                    id_p = p.id
+                    c = Canton(nombre=row[5], cod_division_politica=row[4], provincia= p, provincia_id=id_p)
+                    session.add(c)
+#confirmacion de transacciones
 session.commit()

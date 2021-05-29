@@ -3,6 +3,6 @@
 # cadena conector a la base de datos
 #
 # Sqlite
-cadena_base_datos = 'sqlite:///baseEstablecimientos1.db' 
+cadena_base_datos = 'sqlite:///baseEstablecimientos.db' 
 
 

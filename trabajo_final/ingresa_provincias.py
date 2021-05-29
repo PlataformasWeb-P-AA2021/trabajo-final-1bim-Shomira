@@ -23,12 +23,11 @@ with open('../data/Listado-Instituciones-Educativas.csv', encoding='UTF8') as Fi
     reader = csv.reader(File, delimiter='|', quotechar=',',
                         quoting=csv.QUOTE_MINIMAL)
 
-    nomAux=""             
+    next(reader)
+    aux=[]
     for row in reader:
-        
-        #print(row[0])
-        if nomAux!=row[3]:
-            nomAux=row[3]
+        if row[3] not in aux:
+            aux.append(row[3])
             p = Provincia(nombre=row[3], cod_division_politica=row[2])
             session.add(p)
 # confirmacion de transacciones

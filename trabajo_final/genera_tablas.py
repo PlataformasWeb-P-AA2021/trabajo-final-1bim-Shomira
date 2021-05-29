@@ -24,14 +24,12 @@ class Provincia(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column(String(100), unique=True)
     cod_division_politica = Column(String(50),unique=True)#Código División Política Administrativa Provincia
-    # Mapea la relación entre las clases
-    # Club puede acceder a los jugadores asociados
-    # por la llave foránea
-    canton = relationship("Canton", back_populates="provincia")
+    cantones = relationship("Canton", back_populates="provincia")
     
     def __repr__(self):
-        return "Provincia: nombre=%s\n "% (
-                          self.nombre)
+        return "Provincia: %s Código de División Política: %s \n "% (
+                          self.nombre,
+                          self.cod_division_politica)
 
 class Canton(Base):
     __tablename__ = 'canton'
@@ -39,32 +37,34 @@ class Canton(Base):
     nombre = Column(String(100), unique=True)
     cod_division_politica = Column(String(50),nullable=False)#Código División Política Administrativa  Cantón
     provincia_id = Column(Integer, ForeignKey('provincia.id'))
-    provincia = relationship("Provincia", back_populates="canton")
-    parroquia = relationship("Parroquia", back_populates="canton")############################################
+    provincia = relationship("Provincia", back_populates="cantones")
+    parroquias = relationship("Parroquia", back_populates="canton")############################################
     def __repr__(self):
-        return "Canton: nombre=%s\n provincia=%s\n"% (
+        return "Canton: %s Código de División Política: %s Id de provincia: %d\n"% (
                           self.nombre, 
-                          self.provincia)
+                          self.provincia,
+                          self.provincia_id)
 
 class Parroquia(Base):
     __tablename__ = 'parroquia'
     id = Column(Integer, primary_key=True)
-    nombre = Column(String(100), nullable=False)
+    nombre = Column(String(100),unique=True)
     codigo_distrito = Column(String(50),nullable=False) #Código de Distrito
     cod_division_politica = Column(String(50),nullable=False)#Código División Política Administrativa  Parroquia
     canton_id = Column(Integer, ForeignKey('canton.id'))
-    canton = relationship("Canton", back_populates="parroquia")
+    canton = relationship("Canton", back_populates="parroquias")
+    establecimientos= relationship("Establecimiento", back_populates="parroquias")
     def __repr__(self):
-        return "Parroquia: nombre=%s\n canton=%s\n"% (
+        return "Parroquia: %s Código de División Política: %s Código de Distrito: %s Id Canton: %d\n"% (
                           self.nombre, 
-                          self.canton)
-'''
+                          self.cod_division_politica,
+                          self.codigo_distrito,
+                          self.canton_id)
+
 class Establecimiento(Base):
     __tablename__ = 'establecimiento'
-    id = Column(Integer, primary_key=True)
-    codigo_AMIE = Column(String(100), nullable=False)
+    codigo_AMIE = Column(String, primary_key=True)  
     nombre = Column(String(100), nullable=False) 
-    
     sostenimiento = Column(String(50), nullable=False) 
     tipo_educacion = Column(String(100), nullable=False) 
     modalidad = Column(String(500), nullable=False) 
@@ -72,11 +72,19 @@ class Establecimiento(Base):
     acceso = Column(String(100), nullable=False) 
     num_estudiantes = Column(Integer) 
     num_docentes = Column(Integer) 
-    canton_id = Column(Integer, ForeignKey('canton.id'))
+    parroquia_id = Column(Integer, ForeignKey('parroquia.id'))
     parroquias = relationship("Parroquia", back_populates="establecimientos")
     
     def __repr__(self):
-        return "Establecimiento: %s" % (
-                self.nombre)
-'''
+        return "Establecimiento: %s Codigo Institución: %s Sostenimiento: %s Tipo Educación: %s Modalidad: %s Jornada: %s Acceso: %s Numero Estudiante: %d Numero Docentes: %d" % (
+                self.nombre,
+                self.codigo_AMIE,
+                self.sostenimiento,
+                self.tipo_educacion,
+                self.modalidad,
+                self.jornada,
+                self.acceso,
+                self.num_estudiantes,
+                self.num_docentes)
+
 Base.metadata.create_all(engine)
