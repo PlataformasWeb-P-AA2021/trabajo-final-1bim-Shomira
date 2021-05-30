@@ -18,17 +18,19 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 #Lectura del archivos
- 
 with open('../data/Listado-Instituciones-Educativas.csv', encoding='UTF8') as File:
     reader = csv.reader(File, delimiter='|', quotechar=',',
                         quoting=csv.QUOTE_MINIMAL)
-
+    # Omitir la primera fila del csv 
     next(reader)
+    # Lista vacia, donde guardaremos las provinciass que van pasando
     aux=[]
+
+    # Recorrido del archivo csv, para extraer la información y llenar las tablas
     for row in reader:
         if row[3] not in aux:
-            aux.append(row[3])
-            p = Provincia(nombre=row[3], cod_division_politica=row[2])
-            session.add(p)
+            aux.append(row[3])# agrega las provincias
+            p = Provincia(nombre=row[3], cod_division_politica=row[2]) # Creación del objeto de tipo Provincia
+            session.add(p)  #Agregar el objeto Canton a la sesion
 # confirmacion de transacciones
 session.commit()

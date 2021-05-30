@@ -7,17 +7,14 @@ from sqlalchemy.sql.schema import UniqueConstraint
 # se importa información del archivo configuracion
 from configuracion import cadena_base_datos
 
-# se genera en enlace al gestor de base de
-# datos
-# para el ejemplo se usa la base de datos
-# sqlite
+# se genera en enlace al gestor de base de datos
+# para el ejemplo se usa la base de datos sqlite
 engine = create_engine(cadena_base_datos)
 
 Base = declarative_base()
 
-# Ejemplo que representa la relación entre dos clases
-# One to Many
-# Un club tiene muchos jugadores asociados
+
+# Creación de la tabla Provincia una provincia tiene muchos cantones
 
 class Provincia(Base):
     __tablename__ = 'provincia'
@@ -27,10 +24,11 @@ class Provincia(Base):
     cantones = relationship("Canton", back_populates="provincia")
     
     def __repr__(self):
-        return "Provincia: %s Código de División Política: %s \n "% (
+        return "Provincia: %s | Código de División Política: %s \n "% (
                           self.nombre,
                           self.cod_division_politica)
-
+# Creación de la tabla Canton, un canton tiene muchas parroquias
+3 #Un cantón pertenece a una provincia
 class Canton(Base):
     __tablename__ = 'canton'
     id = Column(Integer, primary_key=True)
@@ -38,13 +36,14 @@ class Canton(Base):
     cod_division_politica = Column(String(50),nullable=False)#Código División Política Administrativa  Cantón
     provincia_id = Column(Integer, ForeignKey('provincia.id'))
     provincia = relationship("Provincia", back_populates="cantones")
-    parroquias = relationship("Parroquia", back_populates="canton")############################################
+    parroquias = relationship("Parroquia", back_populates="canton")
     def __repr__(self):
-        return "Canton: %s Código de División Política: %s Id de provincia: %d\n"% (
+        return "Canton: %s |  Código de División Política: %s | Id de provincia: %d\n"% (
                           self.nombre, 
                           self.provincia,
                           self.provincia_id)
-
+# Creación de la tabla parroquia, una parroquia tiene varios establecimientos
+# una parroquia pertenece a un cantón
 class Parroquia(Base):
     __tablename__ = 'parroquia'
     id = Column(Integer, primary_key=True)
@@ -55,12 +54,13 @@ class Parroquia(Base):
     canton = relationship("Canton", back_populates="parroquias")
     establecimientos= relationship("Establecimiento", back_populates="parroquias")
     def __repr__(self):
-        return "Parroquia: %s Código de División Política: %s Código de Distrito: %s Id Canton: %d\n"% (
+        return "Parroquia: %s |  Código de División Política: %s |  Código de Distrito: %s | Id Canton: %d\n"% (
                           self.nombre, 
                           self.cod_division_politica,
                           self.codigo_distrito,
                           self.canton_id)
 
+# Creación de la tabla Establecimiento con sus atributos.
 class Establecimiento(Base):
     __tablename__ = 'establecimiento'
     codigo_AMIE = Column(String, primary_key=True)  
@@ -76,7 +76,7 @@ class Establecimiento(Base):
     parroquias = relationship("Parroquia", back_populates="establecimientos")
     
     def __repr__(self):
-        return "Establecimiento: %s Codigo Institución: %s Sostenimiento: %s Tipo Educación: %s Modalidad: %s Jornada: %s Acceso: %s Numero Estudiante: %d Numero Docentes: %d" % (
+        return "Establecimiento: %s | Codigo Institución: %s | Sostenimiento: %s | Tipo Educación: %s| Modalidad: %s | Jornada: %s | Acceso: %s |  Numero Estudiante: %d | Numero Docentes: %d | Id Parroquia: %d" % (
                 self.nombre,
                 self.codigo_AMIE,
                 self.sostenimiento,
@@ -85,6 +85,7 @@ class Establecimiento(Base):
                 self.jornada,
                 self.acceso,
                 self.num_estudiantes,
-                self.num_docentes)
+                self.num_docentes,
+                self.parroquia_id)
 
 Base.metadata.create_all(engine)
