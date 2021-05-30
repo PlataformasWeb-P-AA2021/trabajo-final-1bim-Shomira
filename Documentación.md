@@ -78,7 +78,7 @@ class Provincia(Base):
                           self.cod_division_politica)
 
 ```  
-* Canton
+* Canton  
 Un cantón pertence a un provincia.  
 
 ```python
@@ -98,7 +98,7 @@ class Canton(Base):
                           self.provincia,
                           self.provincia_id)
 ```
-* Parroquia
+* Parroquia  
 Una parroquia pertence a un cantón.
 ```python
 # Creación de la tabla parroquia, una parroquia tiene varios establecimientos
@@ -119,7 +119,7 @@ class Parroquia(Base):
                           self.codigo_distrito,
                           self.canton_id)
 ```  
-* Establecimiento
+* Establecimiento  
 Un establecimiento tiene características propias.
 ```python
 # Creación de la tabla Establecimiento con sus atributos.
@@ -151,9 +151,9 @@ class Establecimiento(Base):
                 self.parroquia_id)
 ```
 Relaciones entre entidades:
-Una provincia tiene muchos cantones.  
-Un cantón tiene muchas parroquias y pertenece a una unica provincia.  
-Una parroquia tiene Establecimientos y pertenece a un unico cantón.
+- Una provincia tiene muchos cantones.  
+- Un cantón tiene muchas parroquias y pertenece a una unica provincia.  
+- Una parroquia tiene Establecimientos y pertenece a un unico cantón.
 
 <!-- GETTING STARTED -->
 ## Inicio del proyecto
