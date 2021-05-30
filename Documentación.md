@@ -58,9 +58,9 @@ usaremos para extraer los datos y dividir en enttidades que posteriormente de la
 
 Descripción de datos:
 
-* Provincia.
+Las entidades son:
+* Provincias.
 
-Las entidade es:
 
 ```python
 # Creación de la tabla Provincia una provincia tiene muchos cantones
@@ -78,7 +78,9 @@ class Provincia(Base):
                           self.cod_division_politica)
 
 ```  
-* Un cantón pertence a un provincia.
+* Canton
+Un cantón pertence a un provincia.  
+
 ```python
 # Creación de la tabla Canton, un canton tiene muchas parroquias
 #Un cantón pertenece a una provincia
@@ -96,7 +98,8 @@ class Canton(Base):
                           self.provincia,
                           self.provincia_id)
 ```
-* Una parroquia pertence a un cantón.
+* Parroquia
+Una parroquia pertence a un cantón.
 ```python
 # Creación de la tabla parroquia, una parroquia tiene varios establecimientos
 # una parroquia pertenece a un cantón
@@ -115,8 +118,9 @@ class Parroquia(Base):
                           self.cod_division_politica,
                           self.codigo_distrito,
                           self.canton_id)
-```
-* Un establecimiento tiene características propias.
+```  
+* Establecimiento
+Un establecimiento tiene características propias.
 ```python
 # Creación de la tabla Establecimiento con sus atributos.
 class Establecimiento(Base):
